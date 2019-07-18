@@ -1,0 +1,115 @@
+Affichage des quads :
+ 0 - ( = , 2019 ,  , iv19)
+ 1 - ( = , 2019 ,  , PromoIv)
+ 2 - ( = , 2019 ,  , Ivpromo)
+ 3 - ( = , 2016 ,  , Ivfirst)
+ 4 - ( + , Ivfirst , 2 , Ivpr18)
+ 5 - ( + , Ivpr18 , 1 , Ivpr19)
+ 6 - ( BNE , Ivpromo , Ivpr19 , 14)
+ 7 - ( = , 1 ,  , Bestpr)
+ 8 - ( / , 1 , 2 , t3)
+ 9 - ( * , t3 , S1 , t4)
+ 10 - ( / , 1 , 2 , t5)
+ 11 - ( * , t5 , S2 , t6)
+ 12 - ( + , t4 , t6 , Ivpr19my)
+ 13 - ( BR ,  ,  , 18)
+ 14 - ( + , Ivfirst , 4 , Ivpr20)
+ 15 - ( BG , Ivpromo , Ivpr20 , 18)
+ 16 - ( BNG , Ivpromo , Ivpr19 , 18)
+ 17 - ( = , 2019 ,  , Ivpromo)
+ 18 - (  ,  ,  , )
+Optimisation :
+ 0 - ( = , 2019 ,  , Ivpromo)
+ 1 - ( = , 2016 ,  , Ivfirst)
+ 2 - ( + , Ivfirst , 2 , Ivpr18)
+ 3 - ( + , Ivpr18 , 1 , Ivpr19)
+ 4 - ( BNE , Ivpromo , Ivpr19 , 10)
+ 5 - ( / , 1 , 2 , t3)
+ 6 - ( * , t3 , S1 , t4)
+ 7 - ( = , t3 ,  , t5)
+ 8 - ( * , t5 , S2 , t6)
+ 9 - ( + , t4 , t6 , Ivpr19my)
+ 10 - ( BR ,  ,  , 14)
+ 11 - ( + , Ivfirst , 4 , Ivpr20)
+ 12 - ( BG , Ivpromo , Ivpr20 , 14)
+ 13 - ( BNG , Ivpromo , Ivpr19 , 14)
+ 14 - (  ,  ,  , )
+Code machine :
+DATA SEGMENT 
+DATA ENDS
+CODE SEGEMENT
+ASSUME CS:CODE, DS:DATA
+MAIN :
+MOV AX,DATA
+MOV DS,AX
+
+
+etiquette 0 :
+MOV AX, 2019
+MOV Ivpromo, AX
+
+etiquette 1 :
+MOV AX, 2016
+MOV Ivfirst, AX
+
+etiquette 2 :
+MOV AX, Ivfirst
+ADD AX, 2
+MOV Ivpr18, AX
+
+etiquette 3 :
+MOV AX, Ivpr18
+ADD AX, 1
+MOV Ivpr19, AX
+
+etiquette 4 :
+MOV AX, Ivpromo
+CMP AX, Ivpr19
+JNE etiquette 10
+
+etiquette 5 :
+MOV AX, 1
+DIV AX, 2
+MOV t3, AX
+
+etiquette 6 :
+MOV AX, t3
+MUL AX, S1
+MOV t4, AX
+
+etiquette 7 :
+MOV AX, t3
+MOV t5, AX
+
+etiquette 8 :
+MOV AX, t5
+MUL AX, S2
+MOV t6, AX
+
+etiquette 9 :
+MOV AX, t4
+ADD AX, t6
+MOV Ivpr19my, AX
+
+etiquette 10 :
+JMP AX, 14
+
+etiquette 11 :
+MOV AX, Ivfirst
+ADD AX, 4
+MOV Ivpr20, AX
+
+etiquette 12 :
+MOV AX, Ivpromo
+CMP AX, Ivpr20
+JG etiquette 14
+
+etiquette 13 :
+MOV AX, Ivpromo
+CMP AX, Ivpr19
+JNG etiquette 14
+
+MOV AH,4CH
+INT 21h
+CODE ENDS
+END MAIN
